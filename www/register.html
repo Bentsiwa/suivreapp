@@ -1,0 +1,160 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>Suivre</title>
+		
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		
+ 
+
+		<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" />
+		<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jquerymobile/1.4.5/jquery.mobile.min.css" />
+		<link rel="stylesheet" href="vendor/waves/waves.min.css" />
+		<link rel="stylesheet" href="vendor/wow/animate.css" />
+		<link rel="stylesheet" href="css/nativedroid2.css" />
+
+		<meta name="mobile-web-app-capable" content="yes">
+	 	<meta name="apple-mobile-web-app-capable" content="yes" />
+    	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+
+    
+   		   <script>
+              var userAgent = navigator.userAgent + '';
+              if (userAgent.indexOf('iPhone') > -1) {
+                document.write('<script src="js/cordova-iphone.js"></sc' + 'ript>');
+                var mobile_system = 'iphone';
+              } else if (userAgent.indexOf('Android') > -1) {
+                document.write('<script src="js/cordova-android.js"></sc' + 'ript>');
+                var mobile_system = 'android';
+              } else {
+                var mobile_system = '';
+              }
+         </script>
+
+     
+
+	</head>
+	<body background="img/bg.png">
+
+		<div data-role="page" style="background:url('img/bg.png')"><br>
+			<center><i class='zmdi zmdi-search-in-page zmd-4x clr-white'></i>
+			<h4 class="clr-white">Suivre</h4></center><br>
+			<center>
+				<form>
+
+				<div class="col-xs-10 col-sm-6 col-md-4">
+				<div class="box">
+
+					<!-- <label style="color:white" for="name2b"><i class='zmdi zmdi-account zmd-1x'></i><strong>Username</strong></label> -->
+					 <input style=" color:black;" type="text" name="firstname" id="firstname" value="" data-clear-btn="true" placeholder=" First name">
+					 <input style=" color:black;" type="text" name="lastname" id="lastname" value="" data-clear-btn="true" placeholder=" Last name">
+					<!--   <input style=" color:black;" type="text" name="name2" id="name2b" value="" data-clear-btn="true" placeholder=" Username"> -->
+	                
+	                 <input style=" color:black;" type="text" name="phonenum" id="phonenum" value="" data-clear-btn="true" placeholder=" Phone number">
+
+				<!-- 	<label style="color:white" for="inputDate"><i class='zmdi zmdi-key zmd-1x'></i><strong>Password</strong></label> -->
+					<input style=" color:black;" type="email" name="email" id="email" value="" data-clear-btn="true" placeholder=" Email">
+	                <input type="password" name="password" id="password" value="" data-clear-btn="true" placeholder=" Password">
+	           
+	                <fieldset data-role="controlgroup">
+                            <legend style="color:white;">Select notification channel</legend>
+                            <input class="messageCheckbox" type="checkbox" name="pushnotification" id="checkbox-1ab" checked="">
+                            <label for="checkbox-1ab">Notification on phone</label>
+                            <input class="messageCheckbox2" type="checkbox" name="sms" id="checkbox-2ab">
+                            <label for="checkbox-2ab">SMS</label>
+                            <input class="messageCheckbox3" type="checkbox" name="email" id="checkbox-3ab">
+                            <label for="checkbox-3ab">Email</label>
+                            
+                    </fieldset>
+                    <br> 
+	                <button style="background-color:#00b3b3; color:white;" id="adduser" class="ui-btn"  >Sign Up</button>
+                 </div>
+
+             </div>
+         </form>
+             </center>
+
+
+		</div>
+		<script >
+		   document.getElementById("adduser").addEventListener("click", addUser);
+
+		 
+
+		    function addUserComplete(xhr,status){
+		        if(status!="success"){
+		          alert("error while adding user");
+		          return;
+		        }
+		        else{
+		          var obj=JSON.parse(xhr.responseText);
+		          if(obj.result==0){
+		            alert(obj.message);
+		            window.location.href="register.html";
+		          }
+		          else{
+		         	alert(obj.message);
+		          	window.location.href="index.html";
+		         }
+		          
+		      }
+		    }
+
+		   function addUser(){
+		
+		    var firstname = document.getElementById("firstname").value;
+		    var lastname = document.getElementById("lastname").value;
+		    var email = document.getElementById("email").value;
+		    var password = document.getElementById("password").value;
+		    var phonenum = document.getElementById("phonenum").value;
+
+		    var checkedpush = $('.messageCheckbox:checked').val();
+		    var checkedsms = $('.messageCheckbox2:checked').val();
+		    var checkedemail = $('.messageCheckbox3:checked').val();
+		    var result;
+
+    		
+    		if(checkedpush=="on"){
+    			result="1";
+
+    		}
+    		else{
+    			result="0";
+    		}
+    		if(checkedsms=="on"){
+    			result=result+"1";
+    			
+    		}
+    		else{
+    			result=result+"0";
+    		}
+    		if(checkedemail=="on"){
+    			result=result+"1";
+    			
+    		}
+    		else{
+    			result=result+"0";
+    		}
+    		
+		 
+		    
+		    var ajaxPageUrl="http://suivre.000webhostapp.com/ajaxPage.php?cmd=1&firstname="+firstname+"&lastname="+lastname+"&email="+email+"&phone="+phonenum+"&password="+password+"&notification="+result;
+		  
+		      $.ajax(ajaxPageUrl,{
+		        async:true,
+		        complete:addUserComplete
+		      });
+		   }
+		</script>
+
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+		<script src="http://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+		<script src="http://ajax.googleapis.com/ajax/libs/jquerymobile/1.4.5/jquery.mobile.min.js"></script>
+		<script src="vendor/waves/waves.min.js"></script>
+		<script src="vendor/wow/wow.min.js"></script>
+		<script src="js/nativedroid2.js"></script>
+		<script src="nd2settings.js"></script>
+		 <script type="text/javascript" src="js/index.js"></script>
+
+	</body>
+</html>

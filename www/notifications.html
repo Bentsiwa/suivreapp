@@ -1,0 +1,152 @@
+<html>
+    <!DOCTYPE HTML>
+<html>
+<head>
+        <title>Suivre</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+        
+ 
+
+        <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" />
+        <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jquerymobile/1.4.5/jquery.mobile.min.css" />
+        <link rel="stylesheet" href="vendor/waves/waves.min.css" />
+        <!-- <link rel="stylesheet" href="vendor/wow/animate.css" /> -->
+        <link rel="stylesheet" href="css/nativedroid2.css" />
+
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+
+      
+
+         <script>
+              var userAgent = navigator.userAgent + '';
+              if (userAgent.indexOf('iPhone') > -1) {
+                document.write('<script src="js/cordova-iphone.js"></sc' + 'ript>');
+                var mobile_system = 'iphone';
+              } else if (userAgent.indexOf('Android') > -1) {
+                document.write('<script src="js/cordova-android.js"></sc' + 'ript>');
+                var mobile_system = 'android';
+              } else {
+                var mobile_system = '';
+              }
+         </script>
+
+     
+    <style>
+                    /* Prevent FOUC */
+                    body { opacity: 0; }
+                </style>
+    </head>
+    <body onload="getDeviceLocations()">
+
+        <div data-role="page">
+
+            <nd2-include data-src="panel.left.html"></nd2-include>
+
+            <div data-role="panel" id="bottomsheet" data-animate="false" data-position='bottom' data-display="overlay">
+                <nd2-include data-src="bottom.sheet.html"></nd2-include>
+            </div>
+
+            <div data-role="header" data-position="fixed" >
+
+                <a href="#bottomsheet" class="ui-btn ui-btn-right wow fadeIn" data-wow-delay='1.2s'><i class="zmdi zmdi-more-vert"></i></a>
+                <a href="#leftpanel" class="ui-btn ui-btn-left" ><i class="zmdi zmdi-menu"></i></a>
+                <h1 class="wow fadeIn" data-wow-delay='0.4s'>Notifications</h1>
+
+            </div>
+            
+            <div role="main" class="ui-content wow fadeIn" data-wow-delay="0.2s"  data-inset="false">
+                <ul data-role="listview" data-icon="false" id="devicelocations">
+                <!-- <li>
+                    <a href="#">
+                        <img src="img/green.jpg" class="ui-thumbnail ui-thumbnail-circular" />
+                        <h2><i class="nd2-subhead"></i>Iphone 6</h2>
+                        <h4><i class="zmdi zmdi-pin zmd-1x clr-red"></i>Library</h4>
+                        <p>12:00pm</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <img src="img/green.jpg" class="ui-thumbnail ui-thumbnail-circular" />
+                        <h2><i class="nd2-subhead"></i>HP laptop</h2>
+                        <h4><i class="zmdi zmdi-pin zmd-1x clr-red"></i>Akonor Cafetaria</h4>
+                        <p>14:45pm</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <img src="img/green.jpg" class="ui-thumbnail ui-thumbnail-circular" />
+                        <h2><i class="nd2-subhead"></i>Red dress</h2>
+                        <h4><i class="zmdi zmdi-pin zmd-1x clr-red"></i>Hostel</h4>
+                        <p>16:09pm</p>
+                    </a>
+                </li> -->
+            </ul>
+
+        </div>
+    </div>
+    <script >
+            function getDeviceLocationsComplete(xhr,status){
+                if(status!="success"){
+                  alert("Error during login");
+                  return;
+                }
+                else{
+                  var obj=JSON.parse(xhr.responseText);
+                 
+                  if(obj.result==0){
+                    alert(obj.message);
+                  }
+                  else{
+                     var result="";
+                      var length=obj.devicelocation.length;
+                    //   var dt = new Date();
+                    //  var thetime=dt.toUTCString();
+                    //  alert(thetime);
+                    //  var t = (obj.devicelocation[length-1].time).split(/[- :]/);
+
+                    //     // Apply each element to the Date function
+                    // var d = new Date(Date.UTC(t[0], t[1]-1, t[2], t[3], t[4], t[5]));
+
+                    // alert(d);
+                    // var diffDays = thetime.getDate() - d.getDate(); 
+                    // alert(diffDays);
+                                       
+                      while(length>0){
+                      
+                        result+="<br><li ><div class='row' ><img src='"+obj.devicelocation[length-1].image+"' height='80' width='80' class='ui-thumbnail ui-thumbnail-circular col s4' /><div class='col s8'><h2><i class='nd2-subhead'></i>"+obj.devicelocation[length-1].name+"</h2><h4><i class='zmdi zmdi-pin zmd-1x clr-red'></i>"+obj.devicelocation[length-1].placename+"</h4><p>"+obj.devicelocation[length-1].time+"</p></div></div></li>"; 
+                       length-=1;
+                     }
+               
+             
+
+                    document.getElementById("devicelocations").innerHTML = result;           
+                  
+                }
+              }
+            }
+            
+
+           function getDeviceLocations(){
+        
+                var ajaxPageUrl="http://suivre.000webhostapp.com/ajaxPage.php?cmd=9";
+            
+              $.ajax(ajaxPageUrl,{
+                async:true,
+                complete:getDeviceLocationsComplete
+              });
+           }
+        </script>
+
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+        <script src="http://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquerymobile/1.4.5/jquery.mobile.min.js"></script>
+        <script src="vendor/waves/waves.min.js"></script>
+        <script src="vendor/wow/wow.min.js"></script>
+        <script src="js/nativedroid2.js"></script>
+        <script src="nd2settings.js"></script>
+        <script type="text/javascript" src="js/index.js"></script>
+
+    </body>
+</html>

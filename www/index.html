@@ -1,0 +1,193 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>Suivre</title>
+		
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" />
+		<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jquerymobile/1.4.5/jquery.mobile.min.css" />
+		<link rel="stylesheet" href="vendor/waves/waves.min.css" />
+		<link rel="stylesheet" href="vendor/wow/animate.css" />
+		<link rel="stylesheet" href="css/nativedroid2.css" />
+
+		<meta name="mobile-web-app-capable" content="yes">
+	 	<meta name="apple-mobile-web-app-capable" content="yes" />
+    	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+   		   <script>
+              var userAgent = navigator.userAgent + '';
+              if (userAgent.indexOf('iPhone') > -1) {
+                document.write('<script src="js/cordova-iphone.js"></sc' + 'ript>');
+                var mobile_system = 'iphone';
+              } else if (userAgent.indexOf('Android') > -1) {
+                document.write('<script src="js/cordova-android.js"></sc' + 'ript>');
+                var mobile_system = 'android';
+              } else {
+                var mobile_system = '';
+              }
+         </script>
+        <script >
+        //dsf
+		// 	document.addEventListener("deviceready",onDeviceReady,false);
+		// 	function onDeviceReady(){
+		// 		alert("here");
+		// 		 var push = PushNotification.init({ "android": {"senderID": "81511517930"}});
+		// 		 push.on('registration', function(data) {
+		// 		 console.log(data.registrationId);
+		// 		 alert(data.registrationId);
+		// 		 document.getElementById("gcm_id").innerHTML = data.registrationId;
+		// 		 });
+
+		// 		 push.on('notification', function(data) {
+		// 		 alert(data.title+" Message: " +data.message);
+		// 		 });
+
+		// 		 push.on('error', function(e) {
+		// 		 alert(e);
+		// 		 });
+		// 	}
+		// </script>
+
+     
+
+	</head>
+	<body background="img/bg.png">
+
+		<div data-role="page" style="background:url('img/bg.png')"><br><br><br><br><br><br>
+			<center><i class='zmdi zmdi-search-in-page zmd-4x clr-white'></i>
+			<h4 class="clr-white">Suivre</h4></center><br><br>
+			
+				
+			<center>
+				<form>
+
+				<div class="col-xs-10 col-sm-6 col-md-4">
+				<div class="box">
+
+					<!-- <label style="color:white" for="name2b"><i class='zmdi zmdi-account zmd-1x'></i><strong>Username</strong></label> -->
+	                <input style=" color:black;" type="text" name="email" id="email" data-clear-btn="true" placeholder=" Email">
+
+				<!-- 	<label style="color:white" for="inputDate"><i class='zmdi zmdi-key zmd-1x'></i><strong>Password</strong></label> -->
+	                <input type="password" name="password" id="password"  data-clear-btn="true" placeholder=" Password">
+	                <button style="background-color:#00b3b3; color:white;" id="login" class="ui-btn">Login</button>
+                 </div>
+                 <br>
+                 <h6 class="clr-white" >Don't have an account? <a href="" class="clr-white" id="register"><b class="clr-white">Sign up</b></a></h6>
+
+             </div>
+         </form>
+             </center>
+
+
+		</div>
+
+		
+		<script>
+		  // Initialize Firebase
+		  
+		 //  var config = {
+		 //    apiKey: "AIzaSyDFTaM3V2z_I2FKTFnLrYsRFqsf2K1F-u8",
+		 //    authDomain: "suivre-156322.firebaseapp.com",
+		 //    databaseURL: "https://suivre-156322.firebaseio.com",
+		 //    storageBucket: "suivre-156322.appspot.com",
+		 //    messagingSenderId: "81511517930"
+		 //  };
+		 //  firebase.initializeApp(config);
+		
+			//   const messaging = firebase.messaging();
+			//  messaging.requestPermission()
+			// .then(function() {
+			//  // alert('Notification permission granted.');
+			//   return messaging.getToken();
+			//   // TODO(developer): Retrieve an Instance ID token for use with FCM.
+			//   // ...
+			// })
+			// .then(function(token){
+			// 	//alert(token);
+			// 	//sending data
+			// 	// var firebaseRef=firebase.database().ref();
+ 		// 	// 	firebaseRef.push().set("Me notification");
+ 		// 		//retrieving data
+ 		// 		var firebaseHeadingRef=firebase.database().ref().child("Hello");
+ 		// 		firebaseHeadingRef.on('value',function(datasnapshot){
+ 		// 			//alert(datasnapshot.val());
+ 		// 		})
+			// })
+			// .catch(function(err) {
+			//   alert('Unable to get permission to notify.', err);
+			// });
+
+			// messaging.onMessage(function(payload) {
+			//   alert("Message received. ", payload);
+			//   // ...
+			// });
+
+
+
+		</script>
+		<script >
+		  
+		  document.getElementById("login").addEventListener("click", login);
+		  document.getElementById("register").addEventListener("click", register);
+
+			function loginComplete(xhr,status){
+		        if(status!="success"){
+		          alert("Error during login");
+		          return;
+		        }
+		        else{
+		          var obj=JSON.parse(xhr.responseText);
+		         
+		          if(obj.result==0){
+		            alert(obj.message);
+		            window.location.href="index.html";
+		          }
+		          else{
+		             if(obj.user==null){
+		              alert("You haven't signed up yet");
+		              window.location.href="index.html";
+		            }else{
+		          
+		            // var firstname=obj.user.firstname;
+		            // var lastname=obj.user.lastname;
+		            
+		            localStorage.setItem("firstname",obj.user.firstname);
+    				localStorage.setItem("lastname",obj.user.lastname);
+    				localStorage.setItem("id",obj.user.userid);
+    				
+		          	window.location.href="landingpage.html";
+		        }
+		        }
+		      }
+		    }
+
+		    
+
+		   function login(){
+		    var email = document.getElementById("email").value;
+		    var password = document.getElementById("password").value;
+		    localStorage.setItem("email",email);
+    		localStorage.setItem("password",password);
+
+		      var ajaxPageUrl="http://suivre.000webhostapp.com/ajaxPage.php?cmd=2&email="+email+"&password="+password;
+		  //prompt('url',ajaxPageUrl);
+		      $.ajax(ajaxPageUrl,{
+		        async:true,
+		        complete:loginComplete
+		      });
+		   }
+		   function register(){
+		   		window.location.href="register.html";
+		   }
+		</script>
+		<script type="text/javascript" src="js/index.js"></script>
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+		<script src="http://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+		<script src="http://ajax.googleapis.com/ajax/libs/jquerymobile/1.4.5/jquery.mobile.min.js"></script>
+		<script src="vendor/waves/waves.min.js"></script>
+		<script src="vendor/wow/wow.min.js"></script>
+		<script src="js/nativedroid2.js"></script>
+		<script src="nd2settings.js"></script>
+		
+
+	</body>
+</html>

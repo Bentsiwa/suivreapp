@@ -1,0 +1,168 @@
+<html>
+    <!DOCTYPE HTML>
+<html>
+<head>
+        <title>Suivre</title>
+        <meta name="format-detection" content="telephone=no">
+        <meta name="msapplication-tap-highlight" content="no">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+        
+ 
+
+        <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" />
+        <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jquerymobile/1.4.5/jquery.mobile.min.css" />
+        <link rel="stylesheet" href="vendor/waves/waves.min.css" />
+        <link rel="stylesheet" href="vendor/wow/animate.css" />
+        <link rel="stylesheet" href="css/nativedroid2.css" />
+
+      
+
+         <script>
+              var userAgent = navigator.userAgent + '';
+              if (userAgent.indexOf('iPhone') > -1) {
+                document.write('<script src="js/cordova-iphone.js"></sc' + 'ript>');
+                var mobile_system = 'iphone';
+              } else if (userAgent.indexOf('Android') > -1) {
+                document.write('<script src="js/cordova-android.js"></sc' + 'ript>');
+                var mobile_system = 'android';
+              } else {
+                var mobile_system = '';
+              }
+         </script>
+
+     
+    <style>
+                    /* Prevent FOUC */
+                    body { opacity: 0; }
+                </style>
+    </head>
+    <body>
+
+        <div data-role="page">
+
+            <nd2-include data-src="panel.left.html"></nd2-include>
+
+            <div data-role="panel" id="bottomsheet" data-animate="false" data-position='bottom' data-display="overlay">
+                <nd2-include data-src="bottom.sheet.html"></nd2-include>
+            </div>
+
+            <div data-role="header" data-position="fixed" >
+
+                <a href="#bottomsheet" class="ui-btn ui-btn-right wow fadeIn" data-wow-delay='1.2s'><i class="zmdi zmdi-more-vert"></i></a>
+                <a href="#leftpanel" class="ui-btn ui-btn-left"><i class="zmdi zmdi-menu"></i></a>
+                <h1 class="wow fadeIn" data-wow-delay='0.4s'>Track device</h1>
+
+            </div>
+            
+            <div role="main" class="ui-content wow fadeIn" data-wow-delay="0.2s"  data-inset="false">
+                  <div id="map" style="width:100%;height:500px"></div>
+
+            <script>
+              var customLabel = {
+                library: {
+                  label: 'L'
+                },
+                hotel: {
+                  label: 'H'
+                }
+              };
+            function myMap() {
+                var map = new google.maps.Map(document.getElementById('map'), {
+                  center: new google.maps.LatLng(5.7596123,-0.2194058),
+                  zoom: 16
+                });
+                
+                 // var marker = new google.maps.Marker({position:new google.maps.LatLng(5.7596123,-0.2194058)});
+
+                 //    marker.setMap(map);
+                 //     infowindow = new google.maps.InfoWindow({
+                 //    content: "You are here!"
+                 //  });
+                 //     infowindow.open(map,marker);
+
+                var infoWindow = new google.maps.InfoWindow;
+                //var place=getQueryVariable("placename");
+                   var ajaxPageUrl='http://suivre.000webhostapp.com/ajaxPage.php?cmd=7';
+                  // Change this depending on the name of your PHhttp://localhost/suivre/devicepage.html?image=img/phone.jpg&device=Sumsumg%20NEW%20phone&location=undefinedP or XML file
+                  downloadUrl(ajaxPageUrl, function(data) {
+                    var xml = data.responseXML;
+                    var markers = xml.documentElement.getElementsByTagName('marker');
+                    Array.prototype.forEach.call(markers, function(markerElem) {
+                      var name = markerElem.getAttribute('name');
+                      var address = markerElem.getAttribute('address');
+                      var type = markerElem.getAttribute('type');
+                      var point = new google.maps.LatLng(
+                          parseFloat(markerElem.getAttribute('lat')),
+                          parseFloat(markerElem.getAttribute('lng')));
+
+                      var infowincontent = document.createElement('div');
+                      var strong = document.createElement('strong');
+                      strong.textContent = name
+                      infowincontent.appendChild(strong);
+                 
+                      infowincontent.appendChild(document.createElement('br'));
+
+                      var text = document.createElement('text');
+                      text.textContent = address
+                      infowincontent.appendChild(text);
+                      var icon = customLabel[type] || {};
+                      var marker = new google.maps.Marker({
+                        map: map,
+                        position: point,
+                        icon: "img/pinkball.png",
+                        animation: google.maps.Animation.BOUNCE,
+                        
+                      });
+                      marker.addListener('click', function() {
+                        infoWindow.setContent(infowincontent);
+                        infoWindow.open(map, marker);
+                      });
+
+
+          //infowindow.open(map,marker);
+
+            });
+          });
+        }
+
+
+
+      function downloadUrl(url, callback) {
+        var request = window.ActiveXObject ?
+            new ActiveXObject('Microsoft.XMLHTTP') :
+            new XMLHttpRequest;
+
+        request.onreadystatechange = function() {
+          if (request.readyState == 4) {
+            request.onreadystatechange = doNothing;
+            callback(request, request.status);
+          }
+        };
+
+        request.open('GET', url, true);
+        request.send(null);
+      }
+
+      function doNothing() {}
+
+            </script>
+
+
+
+            <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBTkY7wBvoCOudVkNhgfH7Gp-a9FEYckNY&callback=myMap"></script>
+
+
+        </div>
+    </div>
+
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+        <script src="http://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquerymobile/1.4.5/jquery.mobile.min.js"></script>
+        <script src="vendor/waves/waves.min.js"></script>
+        <script src="vendor/wow/wow.min.js"></script>
+        <script src="js/nativedroid2.js"></script>
+        <script src="nd2settings.js"></script>
+        <script type="text/javascript" src="js/index.js"></script>
+
+    </body>
+</html>

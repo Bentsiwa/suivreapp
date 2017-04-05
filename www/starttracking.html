@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Suivre</title>
+        <meta name="format-detection" content="telephone=no">
+        <meta name="msapplication-tap-highlight" content="no">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+        <meta name="format-detection" content="telephone=no">
+        <meta name="msapplication-tap-highlight" content="no">
+      
+
+    <!-- Path to your custom app styles-->
+     <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" />
+        <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jquerymobile/1.4.5/jquery.mobile.min.css" />
+        <link rel="stylesheet" href="vendor/waves/waves.min.css" />
+        <link rel="stylesheet" href="vendor/wow/animate.css" />
+        <link rel="stylesheet" href="css/nativedroid2.css" />
+    
+         <script>
+      var userAgent = navigator.userAgent + '';
+      if (userAgent.indexOf('iPhone') > -1) {
+        document.write('<script src="js/lib/cordova-iphone.js"></sc' + 'ript>');
+        var mobile_system = 'iphone';
+      } else if (userAgent.indexOf('Android') > -1) {
+        document.write('<script src="js/lib/cordova-android.js"></sc' + 'ript>');
+        var mobile_system = 'android';
+      } else {
+        var mobile_system = '';
+      }
+    </script>
+
+  
+    
+       <style>
+                    /* Prevent FOUC */
+                body { opacity: 0; }
+             </style>
+  </head>
+  <body onload="getDevices()">
+     <div data-role="page" id="landingPage" style="background: white">
+
+       <nd2-include data-src="panel.left.html"></nd2-include>
+
+            <div data-role="panel" id="bottomsheet" data-animate="false" data-position='bottom' data-display="overlay">
+                <nd2-include data-src="bottom.sheet.html"></nd2-include>
+            </div>
+
+            <div data-role="header" data-position="fixed" >
+
+                <a href="#bottomsheet" class="ui-btn ui-btn-right"><i class="zmdi zmdi-more-vert"></i></a>
+                <a href="#leftpanel" class="ui-btn ui-btn-left"><i class="zmdi zmdi-menu"></i></a>
+                <h1 class="wow fadeIn" data-wow-delay='0.4s'>Start Tracking</h1>
+
+            </div>
+            <div role="main" class="ui-content wow fadeIn" data-wow-delay="0.2s"  data-inset="false">
+                <br><br>
+                    <div class="row">
+                   <div class="col-xs-1 col-sm-3 col-md-4">
+                   </div>
+
+                    <div class="col-xs-10 col-sm-6 col-md-4">
+                        <div class="box">
+
+                         <label for="device" id="devicelist" class="select">Device</label>
+              
+                        <br>
+
+                        
+                         <label for="location" id="locationlist" class="select">Current Location</label>
+                         <br>
+                        <fieldset data-role="controlgroup">
+                            <legend >Change notification channel</legend>
+                            <input class="messageCheckbox" type="checkbox" name="pushnotification" id="checkbox-1ab" checked="">
+                            <label for="checkbox-1ab">Notification on phone</label>
+                            <input class="messageCheckbox2" type="checkbox" name="sms" id="checkbox-2ab">
+                            <label for="checkbox-2ab">SMS</label>
+                            <input class="messageCheckbox3" type="checkbox" name="email" id="checkbox-3ab">
+                            <label for="checkbox-3ab">Email</label>
+                            
+                    </fieldset>
+                        <br>
+                     
+                        <br><br>
+
+                        <div id="trackbtn">
+                          <button id="track" class="ui-btn ui-btn-raised clr-primary">Track</button>
+                        </div>
+                        
+                        
+                      
+                    </div>
+               
+                </div>
+                <div class="col-xs-1 col-sm-3 col-md-4"></div>
+
+            </div>
+           
+        
+         
+      </div><!-- /content -->
+      
+    </div><!-- /page -->
+  
+
+  <script >
+  document.getElementById("track").addEventListener("click", starttracking);
+     var device;
+     var locationid;
+     var deviceid;
+
+     function valuechangelocation(){
+         var selectedresult = document.getElementById("location").value;
+          var str = selectedresult;
+          var res = str.replace(" ", "%20");
+  
+         locationid=localStorage.getItem(res);
+       
+         
+
+     }
+    
+
+      function valuechange(){
+
+         var selectedresult = document.getElementById("device").value;
+        
+          var notification=localStorage.getItem(selectedresult);
+
+          
+          if(notification[0]=='1'){
+            trackbtn.innerHTML='<button onclick="stoptracking()"class="ui-btn ui-btn-raised clr-primary"> Stop Track</button>';
+         
+             
+          }else{
+             trackbtn.innerHTML='<button onclick="starttracking()" class="ui-btn ui-btn-raised clr-primary">Track</button>';
+          }
+          
+
+      }
+     
+          
+      function getDevices(){
+    
+          var ajaxPageUrl="https://suivre.000webhostapp.com/ajaxPage.php?cmd=4";
+          //prompt('url',ajaxPageUrl);
+          $.ajax(ajaxPageUrl,{
+            async:true,
+            complete:getDevicesComplete
+          });
+       }
+
+      function getDevicesComplete(xhr,status){
+            if(status!="success"){
+              alert("Error during login");
+              return;
+            }
+            else{
+              var obj=JSON.parse(xhr.responseText);
+             
+              if(obj.result==0){
+                alert(obj.message);
+              }
+              else{
+                 //var result="";
+                  var length=obj.device.length;
+
+                
+                  var data = '<label for="device" class="select">Device</label><select name="select-choice-1" id="device" onchange="valuechange()" data-native-menu="false">';
+                  while(length>0){
+                    var str = obj.device[length-1].name;
+                    var res = str.replace(" ", "%20");
+                    data+="<option value="+res+">"+obj.device[length-1].name+"</option>";
+                    
+                    var devicearray=new Array(obj.device[length-1].track ,obj.device[length-1].deviceid);
+                  
+                    
+                    localStorage.setItem(res, devicearray);
+
+                 
+                   length-=1;
+                 }
+                 data+='</select>';
+               
+                 devicelist.innerHTML=data;
+                 getLocations();
+
+                 
+  
+            }
+          }
+        }
+
+
+        function getLocations(){
+    
+          var ajaxPageUrl="https://suivre.000webhostapp.com/ajaxPage.php?cmd=13";
+          
+          $.ajax(ajaxPageUrl,{
+            async:true,
+            complete:getLocationsComplete
+          });
+       }
+
+      function getLocationsComplete(xhr,status){
+            if(status!="success"){
+              alert("Error getting locations");
+              return;
+            }
+            else{
+              var obj=JSON.parse(xhr.responseText);
+             
+              if(obj.result==0){
+                alert(obj.message);
+              }
+              else{
+                   var length=obj.location.length;
+                  
+                
+                  var data = '<label for="location" class="select">Current Location</label><select name="select-choice-1" id="location" onchange="valuechangelocation()" data-native-menu="false">';
+                  while(length>0){
+
+                    var str = obj.location[length-1].placename;
+                    var res = str.replace(" ", "%20");
+
+                    data+="<option value="+res+" >"+obj.location[length-1].placename+"</option>";
+                  
+                    localStorage.setItem(res, obj.location[length-1].locationid);
+                   
+                 
+                   length-=1;
+                 }
+                 data+='</select>';
+               
+                 locationlist.innerHTML=data;
+                 
+  
+            }
+          }
+        }
+
+
+        function starttracking(){
+          var checkedpush = $('.messageCheckbox:checked').val();
+          var checkedsms = $('.messageCheckbox2:checked').val();
+          var checkedemail = $('.messageCheckbox3:checked').val();
+
+          var deviceSelect = document.getElementById("device");
+          device = deviceSelect.options[deviceSelect.selectedIndex].text;
+
+          var locationSelect = document.getElementById("location");
+          var location = locationSelect.options[locationSelect.selectedIndex].text;
+
+          var result;
+          if(checkedpush=="on"){
+            result="1";
+
+          }
+          else{
+            result="0";
+          }
+          if(checkedsms=="on"){
+            result=result+"1";
+            
+          }
+          else{
+            result=result+"0";
+          }
+          if(checkedemail=="on"){
+            result=result+"1";
+            
+          }
+          else{
+            result=result+"0";
+          }
+        
+          var userid=localStorage.getItem("id");
+          var ajaxPageUrl="http://suivre.000webhostapp.com/ajaxPage.php?cmd=15&notification="+result+"&track=1&userid="+userid+"&devicename="+device;
+     
+         $.ajax(ajaxPageUrl,{
+            async:true,
+            complete:starttrackingComplete
+          });
+
+       }
+
+      function starttrackingComplete(xhr,status){
+            if(status!="success"){
+              alert("Error during login");
+              return;
+            }
+            else{
+              var obj=JSON.parse(xhr.responseText);
+             
+              if(obj.result==0){
+                alert(obj.message);
+              }
+              else{
+                 alert("Tracking "+device);
+                 
+
+                  var res = device.replace(" ", "%20");
+                  var notification=localStorage.getItem(res);
+                  var value = notification.split(",");
+                   deviceid=value[1];
+                  var ajaxPageUrl="http://suivre.000webhostapp.com/ajaxPage.php?cmd=16&deviceid="+value[1]+"&locationid="+locationid;
+                  $.ajax(ajaxPageUrl,{
+                    async:true,
+                    complete:starttrackingCompletely
+                  });
+
+ 
+                 
+  
+            }
+          }
+        }
+        function starttrackingCompletely(xhr,status){
+            if(status!="success"){
+              alert("Error during login");
+              return;
+            }
+            else{
+              var obj=JSON.parse(xhr.responseText);
+             
+              if(obj.result==0){
+                alert(obj.message);
+              }
+              else{
+                
+
+                 window.location.href='singledevicemap.html?placename='+deviceid;
+                 
+  
+            }
+          }
+        }
+
+        function stoptracking(){
+          var deviceSelect = document.getElementById("device");
+          device = deviceSelect.options[deviceSelect.selectedIndex].text;
+
+          var locationSelect = document.getElementById("location");
+          var location = locationSelect.options[locationSelect.selectedIndex].text;
+        
+          var userid=localStorage.getItem("id");
+          var ajaxPageUrl="http://suivre.000webhostapp.com/ajaxPage.php?cmd=15&track=0&userid="+userid+"&devicename="+device;
+     
+         $.ajax(ajaxPageUrl,{
+            async:true,
+            complete:stoptrackingComplete
+          });
+
+       }
+
+      function stoptrackingComplete(xhr,status){
+            if(status!="success"){
+              alert("Error during login");
+              return;
+            }
+            else{
+              var obj=JSON.parse(xhr.responseText);
+             
+              if(obj.result==0){
+                alert(obj.message);
+              }
+              else{
+                 alert("Tracking of "+device+" ended");
+                 window.location.href="starttracking.html";
+                 
+  
+            }
+          }
+        }
+
+        </script>
+
+    
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+        <script src="http://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquerymobile/1.4.5/jquery.mobile.min.js"></script>
+        <script src="vendor/waves/waves.min.js"></script>
+        <script src="vendor/wow/wow.min.js"></script>
+        <script src="js/nativedroid2.js"></script>
+        <script src="nd2settings.js"></script>
+
+  </body>
+</html>

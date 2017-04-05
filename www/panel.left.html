@@ -1,0 +1,67 @@
+			<!-- panel left -->
+			<div  data-role="panel" id="leftpanel" data-display="overlay" data-position-fixed="true" >
+				
+				<div class='nd2-sidepanel-profile wow fadeInDown'>
+					 <img class='profile-background' src="img/green2.jpg" /> 
+					<div class="row">
+				
+						<div class='col-xs-8'> 
+							<div class='box profile-text'>  
+								<strong id="fullname"></strong>
+								<span id="useremail" class='subline'></span>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				
+				<ul data-role="listview" data-icon="false">
+					
+						<li><a href="landingpage.html" style=" color:#808080;"data-ajax='false'><i style=" color:#808080;"class='zmdi zmdi-devices zmd-1x'></i> Devices</a></li>
+						<!-- <li><a href="adddevice.html" style=" color:#808080;"data-ajax='false'><i style=" color:#808080;"class='zmdi zmdi-archive zmd-1x'></i> History</a></li> -->
+						<li><a href="map.html" style=" color:#808080;"data-ajax='false'><i style=" color:#808080;"class='zmdi zmdi-pin zmd-1x'></i> Track device position</a></li>
+						<li><a href="adddevice.html" style=" color:#808080;"data-ajax='false'><i style=" color:#808080;"class='zmdi zmdi-plus zmd-1x'></i> Add device</a></li>
+						<li><a href="notifications.html" style=" color:#808080;" data-ajax='false'><i style=" color:#808080;"class='zmdi zmdi-notifications zmd-1x'></i> Notifications</a></li>
+						<li><a href="info/credits.html" style=" color:#808080;" data-ajax='false'><i style=" color:#808080;"class='zmdi zmdi-settings zmd-1x'></i> Settings</a></li>
+					</ul>
+
+					<hr class="inset">
+				<ul data-role="listview" data-inset="false">
+					
+				</ul>
+				
+				<ul data-role="listview" data-icon="false">
+						
+						<li><a href="info/credits.html" style=" color:#808080;"data-ajax='false'><i style=" color:#808080;"class='zmdi zmdi-edit zmd-1x'></i>Help &amp; feedback</a></li>
+						<li><a href="index.html" style=" color:#808080;"data-ajax='false'><i style=" color:#808080;"class='zmdi zmdi-sign-in zmd-1x'></i> Logout</a></li>
+						
+					</ul>
+			
+			</div>
+			<!-- /panel left -->
+
+			<div data-role="popup" id="uploadimage">
+
+                <div data-role="header">
+                	<h1 class='nd-title'>Upload Image</h1>
+            	</div>
+
+                <div data-role="content">
+                   
+                    <button onclick="uploadImage()" data-rel="back" data-role="button" data-inline="true" class="ui-btn ui-btn-primary"><i class='zmdi zmdi-check'></i> Camera</button>
+                    <button onclick="uploadImage()" data-rel="back" data-role="button" data-inline="true" class="ui-btn ui-btn-primary"><input type="file" id="image" name="image"><i class='zmdi zmdi-cancel'></i> Gallery</button>
+
+                </div>
+            </div>
+            <script >
+            	fullname.innerHTML=localStorage.getItem("firstname")+" "+localStorage.getItem("lastname");
+				useremail.innerHTML=localStorage.getItem("email");
+
+
+				function uploadImage(){
+					alert("here");
+				}
+
+            </script>
+			
+			

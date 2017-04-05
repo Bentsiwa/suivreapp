@@ -1,0 +1,358 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+		<title>Suivre</title>
+		
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+ 
+
+		<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" />
+		<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jquerymobile/1.4.5/jquery.mobile.min.css" />
+		<link rel="stylesheet" href="vendor/waves/waves.min.css" />
+		<!-- <link rel="stylesheet" href="vendor/wow/animate.css" /> -->
+		<link rel="stylesheet" href="css/nativedroid2.css" />
+		<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+		<meta name="mobile-web-app-capable" content="yes">
+	 	<meta name="apple-mobile-web-app-capable" content="yes" />
+    	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+
+    	  <script>
+              var userAgent = navigator.userAgent + '';
+              if (userAgent.indexOf('iPhone') > -1) {
+                document.write('<script src="js/cordova-iphone.js"></sc' + 'ript>');
+                var mobile_system = 'iphone';
+              } else if (userAgent.indexOf('Android') > -1) {
+                document.write('<script src="js/cordova-android.js"></sc' + 'ript>');
+                var mobile_system = 'android';
+              } else {
+                var mobile_system = '';
+              }
+         </script>
+     
+    <style>
+					/* Prevent FOUC */
+					body { opacity: 0; }
+					.label-container{
+						position:fixed;
+						bottom:48px;
+						right:105px;
+						display:table;
+						visibility: hidden;
+					}
+
+					.label-text{
+						color:#FFF;
+						background:rgba(51,51,51,0.5);
+						display:table-cell;
+						vertical-align:middle;
+						padding:10px;
+						border-radius:3px;
+					}
+
+					.label-arrow{
+						display:table-cell;
+						vertical-align:middle;
+						color:#333;
+						opacity:0.5;
+					}
+
+					.float{
+						position:fixed;
+						width:60px;
+						height:60px;
+						bottom:40px;
+						right:40px;
+						background-color:#F33;
+						color:#FFF;
+						border-radius:50px;
+						text-align:center;
+						box-shadow: 2px 2px 3px #999;
+					}
+
+					.my-float{
+						font-size:24px;
+						margin-top:18px;
+					}
+
+					a.float + div.label-container {
+					  visibility: hidden;
+					  opacity: 0;
+					  transition: visibility 0s, opacity 0.5s ease;
+					}
+
+					a.float:hover + div.label-container{
+					  visibility: visible;
+					  opacity: 1;
+
+					}
+
+					a.float:hover {
+						background-color:#F33;
+					}
+		</style>
+	</head>
+	<body onload="getDevices()">
+
+		<div data-role="page">
+
+			<nd2-include data-src="panel.left.html"></nd2-include>
+
+			<div data-role="panel" id="bottomsheet" data-animate="false" data-position='bottom' data-display="overlay">
+				<nd2-include data-src="bottom.sheet.html"></nd2-include>
+			</div>
+
+			<div data-role="header" data-position="fixed" >
+				<a href="#bottomsheet" class="ui-btn ui-btn-right wow fadeIn" data-wow-delay='1.2s'><i class="zmdi zmdi-more-vert"></i></a>
+				<a href="#leftpanel" class="ui-btn ui-btn-left"><i class="zmdi zmdi-menu"></i></a>
+				<h1 class="wow fadeIn" data-wow-delay='0.2s'>Suivre</h1>
+			</div>
+
+			<div role="main" class="ui-content" data-inset="false">
+				<a href="" id="tracking" class="float">
+					<i class="material-icons my-float" style="color:white;">location_searching</i>
+				</a>
+				<div class="label-container">
+				<div class="label-text"></div>
+				<i class="fa fa-play label-arrow"></i>
+				</div>
+				<ul data-role="listview" data-icon="false">
+				<li data-role="list-divider">
+					Devices
+					<!-- <a href="untitled.html">Untitled</a> -->
+				</li>
+				<br><button id="not">Notification</button><br>
+				<div id="devices">
+			
+			</ul>
+		
+           
+
+			</div>
+
+		</div>
+
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+		<script src="http://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+		<script src="http://ajax.googleapis.com/ajax/libs/jquerymobile/1.4.5/jquery.mobile.min.js"></script>
+		<script src="vendor/waves/waves.min.js"></script>
+		
+		<script src="js/nativedroid2.js"></script>
+		<script src="nd2settings.js"></script>
+		<script type="text/javascript">
+
+
+			new $.nd2Search({
+						placeholder : "Search",
+	          defaultIcon : "globe-alt",
+	          source : [
+	              {"label": "iphone", "value": "IP"},
+	              {"label": "Red Polker Dot dress", "value": "RD"},
+	              {"label": "HP laptop", "value": "HP"},
+	             
+	          ],
+	          fn : function(result) {
+	            console.log('--- Your custom handling ---');
+	            console.log('you picked: ');
+	            console.log(result);
+	          }
+			});
+
+		</script>
+		<script>
+		 app.initialize();
+		 document.getElementById("not").addEventListener("click", notificationfunc);
+        var stringimg="Hi your device <img src='img/logo.png'>";
+
+        function notificationfunc(){
+            navigator.notification.alert(
+                stringimg,
+                null,
+                "Suivre App Alert",
+                "OK"
+                
+                
+
+            );
+             navigator.notification.vibrate(2000);
+             navigator.notification.beep(3);
+        }
+
+
+		var newdeviceid="";
+		var userid=localStorage.getItem("id");
+
+		 document.getElementById("tracking").addEventListener("click", starttracking);
+
+		 	function starttracking(){
+		 		window.location.href="starttracking.html";
+		 	}
+
+			function continueDelete(){
+			
+			}
+
+
+			function viewDevice(deviceid,name,description,tagidentification,locationid,image){
+		 
+		   
+
+		   	window.location.href="devicepage.html?deviceid="+deviceid+"&name="+name+"&description="+description+"&tagidentification="+tagidentification+"&locationid="+locationid+"&image="+image;
+
+		  
+		   }
+
+			
+
+		   function editdevice(deviceid,name,description,tagidentification,locationid,image){
+		   //window.location.href=editdevice.html";
+		  
+
+		   	window.location.href="editdevice.html?deviceid="+deviceid+"&name="+name+"&description="+description+"&tagidentification="+tagidentification+"&locationid="+locationid+"&image="+image;
+
+		  
+		   }
+
+		 
+
+		   function deleteDevice(deviceid,name,description,tagidentification,locationid,image){
+		   	//window.location.href=editdevice.html";
+		   	// window.location.href="deletedevice.html?deviceid="+deviceid+"&name="+name+"&description="+description+"&tagidentification="+tagidentification+"&locationid="+locationid+"&image="+image;
+		   		// newdeviceid=deviceid;
+		   		var ajaxPageUrl="http://suivre.000webhostapp.com/ajaxPage.php?cmd=6&deviceid="+deviceid;
+		  		
+		      $.ajax(ajaxPageUrl,{
+		        async:true,
+		        complete:deleteComplete
+		      });
+		   		
+		   }
+
+
+            function deleteComplete(xhr,status){
+                if(status!="success"){
+                  divStatus.innerHTML="error while adding user";
+                  return;
+                }
+                else{
+                  var obj=JSON.parse(xhr.responseText);
+                  if(obj.result==0){
+                    alert(obj.message);
+                  }
+                  else{
+                    // alert(obj.message);
+                   
+		          	window.location.href="landingpage.html";
+                   
+                    new $.nd2Toast({ // The 'new' keyword is important, otherwise you would overwrite the current toast instance
+                       message : "Deletion successful", // Required
+                       action : { // Optional (Defines the action button on the right)
+                         title : "", // Title of the action button
+                         link : "", // optional (either link or fn or both must be set to define an action)
+                         fn : function() { // function that will be triggered when action clicked
+                            console.log("Action Button clicked'");
+                         },
+                         color : "red" // optional color of the button (default: 'lime')
+                       },
+                       ttl : 8000 // optional, time-to-live in ms (default: 3000)
+                     });
+                 
+                 }
+                  
+              }
+            }
+
+              function getDevices(){
+              	
+              
+		
+		      var ajaxPageUrl="http://suivre.000webhostapp.com/ajaxPage.php?cmd=4&id="+userid;
+		  		
+		      $.ajax(ajaxPageUrl,{
+		        async:true,
+		        complete:getDevicesComplete
+		      });
+		   }
+
+			function getDevicesComplete(xhr,status){
+				var userid=localStorage.getItem("id");
+		        if(status!="success"){
+		          alert("Error during login");
+		          return;
+		        }
+		        else{
+		          var obj=JSON.parse(xhr.responseText);
+		         
+		          if(obj.result==0){
+		            alert(obj.message);
+		          }
+		          else{
+		             var result="";
+		              var length=obj.device.length;
+		              if(length<=0){
+		              	alert("No device has been added");
+		              }
+		              
+		              while(length>0){
+		              	if(length==1){
+		              		result+="<div class='row'><div class='col-xs-6'><div class='box'><div class='nd2-card'><a href='#' onclick='viewDevice("+obj.device[length-1].deviceid+","+"&apos;"+obj.device[length-1].name+"&apos;"+","+"&apos;"+obj.device[length-1].description+"&apos;"+","+obj.device[length-1].tagidentification+","+obj.device[length-1].locationid+","+"&apos;"+obj.device[length-1].image+"&apos;"+")' ><div class='card-media'><img style='width:300px;height:224px;'src='"+obj.device[length-1].image+"'></a><div class='card-media-overlay'><div class='card-title has-supporting-text'><h3 class='nd2-subhead clr-white'>"+obj.device[length-1].name+"</h3></div></div></div></a><div class='card-action'><div class='row between-xs'><div class='col-xs-12 align-right'><div class='box'><button onclick='editdevice("+obj.device[length-1].deviceid+","+"&apos;"+obj.device[length-1].name+"&apos;"+","+"&apos;"+obj.device[length-1].description+"&apos;"+","+obj.device[length-1].tagidentification+","+obj.device[length-1].locationid+","+"&apos;"+obj.device[length-1].image+"&apos;"+")' class='ui-btn ui-btn-inline ui-btn-fab'><i class='zmdi zmdi-edit  clr-teal'></i></button><a href='singledevicemap.html?placename="+obj.device[length-1].deviceid+"' class='ui-btn ui-btn-inline ui-btn-fab'><i class='zmdi zmdi-pin clr-teal'></i></a><button class='ui-btn ui-btn-inline ui-btn-fab' onclick='alertsecurity("+obj.device[length-1].deviceid+","+"&apos;"+obj.device[length-1].name+"&apos;"+","+"&apos;"+obj.device[length-1].description+"&apos;"+","+obj.device[length-1].tagidentification+","+obj.device[length-1].locationid+","+"&apos;"+obj.device[length-1].image+"&apos;"+")'><i class='zmdi zmdi-alert-circle clr-red'></i></i></button></div></div></div></div></div></div></div></div></div>";
+		              	}
+		              	else{
+		              		
+
+		              	result+="<div class='row'><div class='col-xs-6'><div class='box'><div class='nd2-card'><a href='#' onclick='viewDevice("+obj.device[length-1].deviceid+","+"&apos;"+obj.device[length-1].name+"&apos;"+","+"&apos;"+obj.device[length-1].description+"&apos;"+","+obj.device[length-1].tagidentification+","+obj.device[length-1].locationid+","+"&apos;"+obj.device[length-1].image+"&apos;"+")' ><div class='card-media'><img style='width:300px;height:224px;' src='"+obj.device[length-1].image+"'></a><div class='card-media-overlay'><div class='card-title has-supporting-text'><h3 class='nd2-subhead clr-white'>"+obj.device[length-1].name+"</h3></div></div></div></button><div class='card-action'><div class='row between-xs'><div class='col-xs-12 align-right'><div class='box'><button onclick='editdevice("+obj.device[length-1].deviceid+","+"&apos;"+obj.device[length-1].name+"&apos;"+","+"&apos;"+obj.device[length-1].description+"&apos;"+","+obj.device[length-1].tagidentification+","+obj.device[length-1].locationid+","+"&apos;"+obj.device[length-1].image+"&apos;"+")' class='ui-btn ui-btn-inline ui-btn-fab'><i class='zmdi zmdi-edit clr-teal'></i></button></button><a href='singledevicemap.html?placename="+obj.device[length-1].deviceid+"' class='ui-btn ui-btn-inline ui-btn-fab'><i class='zmdi zmdi-pin clr-teal'></i></a><button class='ui-btn ui-btn-inline ui-btn-fab' onclick='alertsecurity("+obj.device[length-1].deviceid+","+"&apos;"+obj.device[length-1].name+"&apos;"+","+"&apos;"+obj.device[length-1].description+"&apos;"+","+obj.device[length-1].tagidentification+","+obj.device[length-1].locationid+","+"&apos;"+obj.device[length-1].image+"&apos;"+")'><i class='zmdi zmdi-alert-circle clr-red'></i></i></button></div></div></div></div></div></div></div><div class='col-xs-6'><div class='box'><div class='nd2-card'><a href='#' onclick='viewDevice("+obj.device[length-2].deviceid+","+"&apos;"+obj.device[length-2].name+"&apos;"+","+"&apos;"+obj.device[length-2].description+"&apos;"+","+obj.device[length-2].tagidentification+","+obj.device[length-2].locationid+","+"&apos;"+obj.device[length-2].image+"&apos;"+")'><div class='card-media'><img style='width:300px;height:224px;' src='"+obj.device[length-2].image+"'></a><div class='card-media-overlay'><div class='card-title has-supporting-text'><h3 class='nd2-subhead clr-white'>"+obj.device[length-2].name+"</h3></div></div></div><div class='card-action'><div class='row between-xs'><div class='col-xs-12 align-right'><div class='box'><button onclick='editdevice("+obj.device[length-2].deviceid+","+"&apos;"+obj.device[length-2].name+"&apos;"+","+"&apos;"+obj.device[length-2].description+"&apos;"+","+obj.device[length-2].tagidentification+","+obj.device[length-2].locationid+","+"&apos;"+obj.device[length-2].image+"&apos;"+")' class='ui-btn ui-btn-inline ui-btn-fab'><i class='zmdi zmdi-edit clr-teal'></i></button><a href='singledevicemap.html?placename="+obj.device[length-2].deviceid+"' class='ui-btn ui-btn-inline ui-btn-fab'><i class='zmdi zmdi-pin clr-teal'></i></a><button class='ui-btn ui-btn-inline ui-btn-fab' onclick='alertsecurity("+obj.device[length-2].deviceid+","+"&apos;"+obj.device[length-2].name+"&apos;"+","+"&apos;"+obj.device[length-2].description+"&apos;"+","+obj.device[length-2].tagidentification+","+obj.device[length-2].locationid+","+"&apos;"+obj.device[length-2].image+"&apos;"+")'><i class='zmdi zmdi-alert-circle clr-red'></i></i></button></div></div></div></div></div></div></div></div>";
+		              }
+		                 
+		             
+		               length-=2;
+		             }
+		        
+		             devices.innerHTML=result;
+	
+		        }
+		      }
+		    }
+
+		     function alertsecurity(deviceid,name,description,tagidentification,locationid,image){
+		   		
+		   		var ajaxPageUrl="http://suivre.000webhostapp.com/ajaxPage.php?cmd=14&userid="+userid+"&deviceid="+deviceid+"&name="+name+"&description="+description+"&locationid="+locationid+"&image="+image;
+		  	alert("Notification sent");
+		      $.ajax(ajaxPageUrl,{
+		        async:true,
+		        complete:alertComplete
+		      });
+		   		
+		   }
+
+
+            function alertComplete(xhr,status){
+                if(status!="success"){
+                  divStatus.innerHTML="error while adding user";
+                  return;
+                }
+                else{
+                  var obj=JSON.parse(xhr.responseText);
+                  if(obj.result==0){
+                    alert(obj.message);
+                  }
+                  else{
+                    // alert(obj.message);
+                   
+		        	alert("Security has been alerted");
+                 
+                 }
+                  
+              }
+            }
+		    
+
+		 
+
+		</script>
+		 <script type="text/javascript" src="js/index.js"></script>
+		 <script type="text/javascript" src="js/notification.js"></script>
+
+	</body>
+</html>

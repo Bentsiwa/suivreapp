@@ -1,0 +1,380 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+		<title>Suivre</title>
+		<meta name="format-detection" content="telephone=no">
+    	<meta name="msapplication-tap-highlight" content="no">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		
+ 
+
+		<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" />
+		<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jquerymobile/1.4.5/jquery.mobile.min.css" />
+		<link rel="stylesheet" href="vendor/waves/waves.min.css" />
+		<link rel="stylesheet" href="vendor/wow/animate.css" />
+		<link rel="stylesheet" href="css/nativedroid2.css" />
+			<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+
+    	 <script>
+		      var userAgent = navigator.userAgent + '';
+		      if (userAgent.indexOf('iPhone') > -1) {
+		        document.write('<script src="js/cordova-iphone.js"></sc' + 'ript>');
+		        var mobile_system = 'iphone';
+		      } else if (userAgent.indexOf('Android') > -1) {
+		        document.write('<script src="js/cordova-android.js"></sc' + 'ript>');
+		        var mobile_system = 'android';
+		      } else {
+		        var mobile_system = '';
+		      }
+   		 </script>
+
+     
+    <style>
+					/* Prevent FOUC */
+					body { opacity: 0; }
+				
+
+					.label-container{
+						position:fixed;
+						bottom:48px;
+						right:105px;
+						display:table;
+						visibility: hidden;
+					}
+
+					.label-text{
+						color:#FFF;
+						background:rgba(51,51,51,0.5);
+						display:table-cell;
+						vertical-align:middle;
+						padding:10px;
+						border-radius:3px;
+					}
+
+					.label-arrow{
+						display:table-cell;
+						vertical-align:middle;
+						color:#333;
+						opacity:0.5;
+					}
+
+					.float{
+						position:fixed;
+						width:60px;
+						height:60px;
+						bottom:40px;
+						right:40px;
+						background-color:#F33;
+						color:#FFF;
+						border-radius:50px;
+						text-align:center;
+						box-shadow: 2px 2px 3px #999;
+					}
+
+					.my-float{
+						font-size:24px;
+						margin-top:18px;
+					}
+
+					a.float + div.label-container {
+					  visibility: hidden;
+					  opacity: 0;
+					  transition: visibility 0s, opacity 0.5s ease;
+					}
+
+					a.float:hover + div.label-container{
+					  visibility: visible;
+					  opacity: 1;
+
+					}
+
+					a.float:hover {
+						background-color:#F33;
+					}
+				</style>
+	</head>
+
+	<body onload="getValues()">
+
+		<div data-role="page">
+
+			<nd2-include data-src="panel.left.html"></nd2-include>
+
+			<div data-role="panel" id="bottomsheet" data-animate="false" data-position='bottom' data-display="overlay">
+				<nd2-include data-src="bottom.sheet.html"></nd2-include>
+			</div>
+
+			<div data-role="header" data-position="fixed" >
+
+
+				<a href="#delete" data-rel='popup' data-position-to='window' data-role='button' data-inline='true' data-transition='pop' class="ui-btn ui-btn-right wow fadeIn" data-wow-delay='1.2s'><i class="zmdi zmdi-delete"></i></a>
+
+				<a href="#leftpanel" class="ui-btn ui-btn-left"><i class="zmdi zmdi-menu"></i></a>
+				<h1 class="wow fadeIn" data-wow-delay='0.4s'>Suivre</h1>
+
+			</div>
+		
+			<div role="main" class="ui-content wow fadeIn" data-wow-delay="0.2s"  data-inset="false">
+
+				<button onclick="alertsecurity()" class="float">
+					<i class="material-icons my-float" style="color:white;">error</i>
+				</button>
+				<div class="label-container">
+				<div class="label-text"></div>
+				
+				
+				</div>
+				
+			
+
+				<div class="nd2-card">
+					
+					<div class="card-title has-avatar">
+						<h3 class="card-primary-title" id="devices">
+					</h3>
+						<h5 class="card-subtitle row" ><p class="col s6">Current Location: </p><p class="col s6" id="locations"></p></h5>
+						
+					</div>
+					<div class="card-media" id="deviceimg">
+						<!-- <img src="img/laptop.jpg"> -->
+					</div>
+
+					<div class="card-supporting-text">
+						<ul data-role="listview" data-icon="false" id="listlocations">
+				<li data-role="list-divider">
+					Track device
+				</li>
+				<li>
+					<a href="#">
+						<img src="img/green.jpg" class="ui-thumbnail ui-thumbnail-circular" />
+						<h2><i class="zmdi zmdi-pin zmd-1x clr-red"></i>Library</h2>
+						<p>12:00pm</p>
+					</a>
+				</li>
+				<li>
+					<a href="#">
+						<img src="img/green.jpg" class="ui-thumbnail ui-thumbnail-circular" />
+						<h2><i class="zmdi zmdi-pin zmd-1x clr-red"></i>Akonor Cafetaria</h2>
+						<p>14:45pm</p>
+					</a>
+				</li>
+				<li>
+					<a href="#">
+						<img src="img/green.jpg" class="ui-thumbnail ui-thumbnail-circular" />
+						<h2><i class="zmdi zmdi-pin zmd-1x clr-red"></i>Hostel</h2>
+						<p>16:09pm</p>
+					</a>
+				</li>
+				<li>
+
+				</li>
+			</ul>
+					</div>
+
+				</div>
+
+					<div data-role="popup" id="delete">
+
+                <div data-role="header">
+                	<h1 class='nd-title'>Confirm delete</h1>
+            	</div>
+
+                <div data-role="content">
+                    <p>Are you sure you want to delete this device?</p>
+                    <button onclick="deleteDevice()" data-rel="back" data-role="button" data-inline="true" class="ui-btn ui-btn-primary"></i> Yes</button>
+                    <a href="#" data-rel="back" data-role="button" data-inline="true" class="ui-btn ui-btn-primary"><i class='zmdi zmdi-cancel'></i> No</a>
+
+                </div>
+            </div>
+
+				
+
+
+			</div>
+
+		</div>
+		<script>
+		var userid=localStorage.getItem("id");
+		var image;
+		var device;
+		var locationid;
+		var deviceid;
+		var description;
+
+		function getValues(){
+			
+		        var name=getQueryVariable("image");
+		        image = name.replace("%20", " ");
+		        
+
+		        var name=getQueryVariable("name");
+		        device = name.replace("%20", " ");
+		        alert(device);
+
+
+		        var name=getQueryVariable("deviceid");
+		        deviceid=name.replace("%20"," ");
+		        alert(deviceid);
+		 
+
+		        var name=getQueryVariable("description");
+		        description=name.replace("%20"," ");
+	
+
+		        deviceimg.innerHTML="<img src='"+image+"'>";
+		       	// locations.innerHTML=location;
+		       	devices.innerHTML=device;
+
+		       	var ajaxPageUrl="http://suivre.000webhostapp.com/ajaxPage.php?cmd=10&device="+deviceid;
+		  
+		      $.ajax(ajaxPageUrl,{
+		        async:true,
+		        complete:getDeviceLocationsComplete
+		      });
+		     
+
+   		 }
+
+   		 function getDeviceLocationsComplete(xhr,status){
+                if(status!="success"){
+                  alert("Error during login");
+                  return;
+                }
+                else{
+                  var obj=JSON.parse(xhr.responseText);
+                 
+                  if(obj.result==0){
+                    alert(obj.message);
+                  }
+                  else{
+                     var result="";
+                      var length=obj.devicelocation.length;
+                      
+                      while(length>0){
+                      
+                        result+="<li ><div class='row' ><img src='"+obj.devicelocation[length-1].image+"' height='80' width='80' class='ui-thumbnail ui-thumbnail-circular col s4' /><div class='col s8'><h4><i class='zmdi zmdi-pin zmd-1x clr-red'></i>"+obj.devicelocation[length-1].placename+"</h4><p>"+obj.devicelocation[length-1].time+"</p></div></div></li>"; 
+                        var location=obj.devicelocation[length-1].placename;
+                        locationid=obj.devicelocation[length-1].locationid;
+                       length-=1;
+                     }
+               	
+                    document.getElementById("listlocations").innerHTML = result;     
+                    document.getElementById("locations").innerHTML = " "+location;   
+                  
+                }
+              }
+            }
+          
+
+        function getQueryVariable(variable) {
+        
+          var query = window.location.search.substring(1);
+          var vars = query.split("&");
+          for (var i=0;i<vars.length;i++) {
+            var pair = vars[i].split("=");
+            if (pair[0] == variable) {
+               
+              return pair[1];
+            }
+          } 
+          alert('Query Variable ' + variable + ' not found');
+        }
+
+		   function deleteDevice(){
+		   	
+		   		
+		   		var ajaxPageUrl="http://suivre.000webhostapp.com/ajaxPage.php?cmd=6&deviceid="+deviceid;
+		  		
+		      $.ajax(ajaxPageUrl,{
+		        async:true,
+		        complete:deleteComplete
+		      });
+		   		
+		   }
+
+
+            function deleteComplete(xhr,status){
+                if(status!="success"){
+                  divStatus.innerHTML="error while adding user";
+                  return;
+                }
+                else{
+                  var obj=JSON.parse(xhr.responseText);
+                  if(obj.result==0){
+                    alert(obj.message);
+                  }
+                  else{
+                    // alert(obj.message);
+                   
+		          	window.location.href="landingpage.html";
+                   
+                    new $.nd2Toast({ // The 'new' keyword is important, otherwise you would overwrite the current toast instance
+                       message : "Deletion successful", // Required
+                       action : { // Optional (Defines the action button on the right)
+                         title : "", // Title of the action button
+                         link : "", // optional (either link or fn or both must be set to define an action)
+                         fn : function() { // function that will be triggered when action clicked
+                            console.log("Action Button clicked'");
+                         },
+                         color : "red" // optional color of the button (default: 'lime')
+                       },
+                       ttl : 8000 // optional, time-to-live in ms (default: 3000)
+                     });
+                 
+                 }
+                  
+              }
+            }
+           
+            function alertsecurity(){
+            	 var ajaxPageUrl="http://suivre.000webhostapp.com/ajaxPage.php?cmd=14&userid="+userid+"&deviceid="+deviceid+"&name="+device+"&description="+description+"&locationid="+locationid+"&image="+image;
+            	
+            		alert("Notification sent");
+		      $.ajax(ajaxPageUrl,{
+		        async:true,
+		        complete:alertComplete
+		      });
+		   		
+		   }
+
+
+            function alertComplete(xhr,status){
+                if(status!="success"){
+                  divStatus.innerHTML="error while adding user";
+                  return;
+                }
+                else{
+                  var obj=JSON.parse(xhr.responseText);
+                  if(obj.result==0){
+                    alert(obj.message);
+                  }
+                  else{
+                    // alert(obj.message);
+                   
+		        	alert("Security has been alerted");
+                 
+                 }
+                  
+              }
+            }
+		</script>
+
+		
+			<script type="text/javascript" src="js/index.js"></script>
+
+			<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+			<script type="text/javascript" src="cordova.js"></script>
+			<script type="text/javascript" src="scripts/platformOverrides.js"></script>
+			<script type="text/javascript" src="scripts/index.js"></script>
+			<script type="text/javascript" src="cordova.js"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+        <script src="http://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquerymobile/1.4.5/jquery.mobile.min.js"></script>
+        <script src="vendor/waves/waves.min.js"></script>
+       
+        <script src="js/nativedroid2.js"></script>
+        <script src="nd2settings.js"></script>
+
+	</body>
+</html>
