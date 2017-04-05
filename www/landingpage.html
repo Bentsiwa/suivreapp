@@ -20,6 +20,7 @@
     	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
 
     	  <script>
+    	   app.initialize();
               var userAgent = navigator.userAgent + '';
               if (userAgent.indexOf('iPhone') > -1) {
                 document.write('<script src="js/cordova-iphone.js"></sc' + 'ript>');
@@ -162,13 +163,14 @@
 
 		</script>
 		<script>
-		 app.initialize();
+		
 		 document.getElementById("not").addEventListener("click", notificationfunc);
-        var stringimg="Hi your device <img src='img/logo.png'>";
+
+        
 
         function notificationfunc(){
             navigator.notification.alert(
-                stringimg,
+                "Hi",
                 null,
                 "Suivre App Alert",
                 "OK"
